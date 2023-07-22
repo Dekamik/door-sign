@@ -4,10 +4,21 @@
        hx-swap="outerHTML">
     <thead>
     <tr>
-        <th scope="col">Tid</th>
-        <th scope="col">°C</th>
-        <th scope="col">Väder</th>
-        <th scope="col">Nederbörd (mm)</th>
+        <th scope="col" colspan="4">Väderleksrapport</th>
     </tr>
     </thead>
+    <tbody>
+    {{range .yr}}
+    <tr>
+        <th scope="row">{{ .Time }}</th>
+        <td>{{ .Temperature }}</td>
+        <td>{{ .Symbol }}</td>
+        <td>{{ .Precipitation }} mm</td>
+    </tr>
+    {{else}}
+    <tr>
+        <td colspan="4">No data</td>
+    </tr>
+    {{end}}
+    </tbody>
 </table>
