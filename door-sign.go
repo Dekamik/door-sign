@@ -67,7 +67,7 @@ func updateYR(maxLength int) []templates.YRForecast {
 
 	forecasts := make([]templates.YRForecast, 0)
 	for i, item := range res.Properties.Timeseries {
-		time := item.Time.Format("15:04")
+		time := item.Time.Local().Format("15:04")
 		if i != 0 &&
 			time != "00:00" &&
 			time != "08:00" &&
