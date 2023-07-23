@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"door-sign/configuration"
+	"door-sign/helpers"
 	"door-sign/integrations"
 	"log"
 )
@@ -9,7 +10,8 @@ import (
 type YRForecast struct {
 	Time          string
 	Temperature   float64
-	Symbol        string
+	SymbolCode    string
+	SymbolID      string
 	Precipitation float64
 }
 
@@ -32,7 +34,8 @@ func UpdateYR(conf configuration.Config, maxLength int) []YRForecast {
 		forecast := YRForecast{
 			Time:          time,
 			Temperature:   item.Data.Instant.Details.AirTemperature,
-			Symbol:        item.Data.Next6Hours.Summary.SymbolCode,
+			SymbolCode:    item.Data.Next6Hours.Summary.SymbolCode,
+			SymbolID:      helpers.YRSymbolsID[item.Data.Next6Hours.Summary.SymbolCode],
 			Precipitation: item.Data.Next6Hours.Details.PrecipitationAmount,
 		}
 		forecasts = append(forecasts, forecast)

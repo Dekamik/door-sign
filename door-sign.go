@@ -8,9 +8,6 @@ import (
 	"html/template"
 )
 
-//go:embed images
-var _ embed.FS
-
 //go:embed templates
 var templateFS embed.FS
 
@@ -43,6 +40,8 @@ func main() {
 			"templates/htmx_yr.html"))
 		t.Execute(c.Writer, gin.H{"yr": handlers.UpdateYR(conf, 4)})
 	})
+
+	r.Static("/assets", "./assets")
 
 	r.Run()
 }

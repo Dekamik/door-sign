@@ -1,6 +1,14 @@
-package images
+package helpers
 
-var YR = map[string]string{
+var SLTransportModeIcons = map[string]string{
+	"BUS":   "bus",
+	"METRO": "subway",
+	"SHIP":  "boat",
+	"TRAIN": "train",
+	"TRAM":  "tram",
+}
+
+var YRSymbolsID = map[string]string{
 	"clearsky_day":                               "01d",
 	"clearsky_night":                             "01n",
 	"clearsky_polartwilight":                     "01m",

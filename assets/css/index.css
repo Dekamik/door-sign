@@ -1,0 +1,7 @@
+.icon {
+    height: 2rem;
+}
+
+.white {
+    filter: invert(75%) sepia(2%) saturate(1443%) hue-rotate(157deg) brightness(98%) contrast(87%);
+}

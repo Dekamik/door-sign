@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"door-sign/configuration"
+	"door-sign/helpers"
 	"door-sign/integrations"
 	"log"
 	"net/url"
@@ -23,7 +24,7 @@ func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDepar
 	departures := make([]SLDeparture, 0)
 	for _, item := range res.ResponseData.Metros {
 		departure := SLDeparture{
-			TransportMode: item.TransportMode,
+			TransportMode: helpers.SLTransportModeIcons[item.TransportMode],
 			LineNumber:    item.LineNumber,
 			Destination:   item.Destination,
 			DisplayTime:   item.DisplayTime,
@@ -32,7 +33,7 @@ func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDepar
 	}
 	for _, item := range res.ResponseData.Buses {
 		departure := SLDeparture{
-			TransportMode: item.TransportMode,
+			TransportMode: helpers.SLTransportModeIcons[item.TransportMode],
 			LineNumber:    item.LineNumber,
 			Destination:   item.Destination,
 			DisplayTime:   item.DisplayTime,
@@ -41,7 +42,7 @@ func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDepar
 	}
 	for _, item := range res.ResponseData.Trains {
 		departure := SLDeparture{
-			TransportMode: item.TransportMode,
+			TransportMode: helpers.SLTransportModeIcons[item.TransportMode],
 			LineNumber:    item.LineNumber,
 			Destination:   item.Destination,
 			DisplayTime:   item.DisplayTime,
@@ -50,7 +51,7 @@ func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDepar
 	}
 	for _, item := range res.ResponseData.Trams {
 		departure := SLDeparture{
-			TransportMode: item.TransportMode,
+			TransportMode: helpers.SLTransportModeIcons[item.TransportMode],
 			LineNumber:    item.LineNumber,
 			Destination:   item.Destination,
 			DisplayTime:   item.DisplayTime,

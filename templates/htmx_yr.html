@@ -9,10 +9,10 @@
     </thead>
     <tbody>
     {{range .yr}}
-    <tr>
+    <tr style="height: 2em">
         <th scope="row">{{ .Time }}</th>
         <td>{{ .Temperature }} °C</td>
-        <td>{{ .Symbol }}</td>
+        <td><img class="icon" src="../assets/images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg" alt="{{ .SymbolCode }}" /></td>
         <td>{{ .Precipitation }} mm</td>
     </tr>
     {{else}}
