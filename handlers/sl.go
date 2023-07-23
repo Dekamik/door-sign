@@ -68,7 +68,7 @@ func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDepar
 	return departures[0:min(maxLength, len(departures))]
 }
 
-func GetSLSiteId(conf configuration.Config) string {
+func GetSLSiteID(conf configuration.Config) string {
 	escapedBusStop := url.QueryEscape(conf.Departures.BusStop)
 	res, err := integrations.SLStopLookup(conf.Departures.SLStopLookupV1Key, escapedBusStop, 1)
 	if err != nil {

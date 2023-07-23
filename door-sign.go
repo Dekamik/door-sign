@@ -14,7 +14,7 @@ var templateFS embed.FS
 func main() {
 	var conf configuration.Config
 	conf = *conf.ReadYamlConfig()
-	siteID := handlers.GetSLSiteId(conf)
+	siteID := handlers.GetSLSiteID(conf)
 
 	router := gin.Default()
 
