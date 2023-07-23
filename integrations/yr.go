@@ -2,7 +2,6 @@ package integrations
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 )
 
@@ -66,10 +65,5 @@ type YRResponse struct {
 
 func YRGetLocationForecast(lat float32, lon float32) (*YRResponse, error) {
 	url := fmt.Sprintf("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%f&lon=%f", lat, lon)
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return call[YRResponse](req)
+	return get[YRResponse](url)
 }

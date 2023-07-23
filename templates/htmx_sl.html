@@ -4,7 +4,21 @@
        hx-swap="outerHTML">
     <thead>
     <tr>
-        <th scope="col" colspan="1">Avgångar</th>
+        <th scope="col" colspan="4">Avgångar</th>
     </tr>
     </thead>
+    <tbody>
+    {{range .sl}}
+    <tr>
+        <td>{{ .TransportMode }}</td>
+        <td>{{ .LineNumber }}</td>
+        <td>{{ .Destination }}</td>
+        <th scope="row">{{ .DisplayTime }}</th>
+    </tr>
+    {{else}}
+    <tr>
+        <td colspan="4">No data</td>
+    </tr>
+    {{end}}
+    </tbody>
 </table>

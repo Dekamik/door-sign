@@ -7,6 +7,16 @@ import (
 )
 
 type Config struct {
+	App struct {
+		Port int `yaml:"port"`
+	}
+	Departures struct {
+		BusStop              string `yaml:"bus_stop"`
+		SLDeparturesV4Key    string `yaml:"sl_departures_v4_key"`
+		SLServiceAlertsV2Key string `yaml:"sl_service_alerts_v2_key"`
+		SLStopLookupV1Key    string `yaml:"sl_stop_lookup_v1_key"`
+		SLStopsAndLinesV2Key string `yaml:"sl_stops_and_lines_v2_key"`
+	}
 	Weather struct {
 		Lat float32 `yaml:"lat"`
 		Lon float32 `yaml:"lon"`

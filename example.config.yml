@@ -1,0 +1,13 @@
+app:
+  port: 8080
+
+departures:
+  bus_stop: <SL_bus_stop>
+  sl_departures_v4_key: <api_key>
+  sl_service_alerts_v2_key: <api_key>
+  sl_stop_lookup_v1_key: <api_key>
+  sl_stops_and_lines_v2_key: <api_key>
+
+weather:
+  lat: <latitude>
+  lon: <longitude>
