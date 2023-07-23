@@ -14,7 +14,7 @@ type YRForecast struct {
 }
 
 func UpdateYR(conf configuration.Config, maxLength int) []YRForecast {
-	res, err := integrations.YRGet(conf.Weather.Lat, conf.Weather.Lon)
+	res, err := integrations.YRGetLocationForecast(conf.Weather.Lat, conf.Weather.Lon)
 	if err != nil {
 		log.Fatalln(err)
 	}

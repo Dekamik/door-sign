@@ -64,14 +64,12 @@ type YRResponse struct {
 	} `json:"properties"`
 }
 
-func YRGet(lat float32, lon float32) (*YRResponse, error) {
+func YRGetLocationForecast(lat float32, lon float32) (*YRResponse, error) {
 	url := fmt.Sprintf("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%f&lon=%f", lat, lon)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
-
-	req.Header.Set("User-Agent", "door-sign/0.1")
 
 	return call[YRResponse](req)
 }
