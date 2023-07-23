@@ -34,9 +34,9 @@ func call[T any](req *http.Request) (*T, error) {
 	}
 
 	if res.StatusCode >= 400 {
-		return nil, fmt.Errorf("%s %s returned the following error:\n%s\n", req.Method, req.URL.String(), string(bodyBytes))
+		return nil, fmt.Errorf("%s - %s %s returned the following error:\n%s\n", res.Status, req.Method, req.URL.String(), string(bodyBytes))
 	}
-	log.Printf("%s %s - %s\n", req.Method, req.URL.String(), res.Status)
+	log.Printf("%s - %s %s\n", res.Status, req.Method, req.URL.String())
 
 	var response T
 	err = json.Unmarshal(bodyBytes, &response)

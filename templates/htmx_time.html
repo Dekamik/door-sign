@@ -1,0 +1,10 @@
+<div hx-get="/htmx/time.html"
+     hx-trigger="every 1s"
+     hx-swap="outerHTML">
+    <p class="clock">
+        {{ .time.Time }}
+    </p>
+    <p class="date">
+        {{ .time.Date }}
+    </p>
+</div>

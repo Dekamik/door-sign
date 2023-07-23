@@ -15,6 +15,10 @@ type YRForecast struct {
 	Precipitation float64
 }
 
+func GetNowcast() *YRForecast {
+	return nil
+}
+
 func UpdateYR(conf configuration.Config, maxLength int) []YRForecast {
 	res, err := integrations.YRGetLocationForecast(conf.Weather.Lat, conf.Weather.Lon)
 	if err != nil {

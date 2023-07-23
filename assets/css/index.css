@@ -1,5 +1,19 @@
+.clock {
+    font-size: 4rem;
+    font-weight: 500;
+}
+
+.date {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
 .icon {
     height: 1.65rem;
+}
+
+.row-upper {
+    line-height: 0.7;
 }
 
 .white {

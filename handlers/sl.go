@@ -15,6 +15,13 @@ type SLDeparture struct {
 	DisplayTime   string
 }
 
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDeparture {
 	res, err := integrations.SLGetDepartures(conf.Departures.SLDeparturesV4Key, siteId, 60)
 	if err != nil {
@@ -58,7 +65,7 @@ func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDepar
 		}
 		departures = append(departures, departure)
 	}
-	return departures[0:maxLength]
+	return departures[0:min(maxLength, len(departures))]
 }
 
 func GetSLSiteId(conf configuration.Config) string {
