@@ -91,7 +91,7 @@ func (y *YRImpl) GetForecasts(conf configuration.Config, maxLength int) []YRFore
 
 func NewYR() YR {
 	return &YRImpl{
-		CacheLifetime:  time.Second * 50,
+		CacheLifetime:  time.Minute * 5,
 		CachedResponse: nil,
 	}
 }
