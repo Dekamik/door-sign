@@ -1,5 +1,5 @@
 <div hx-get="/htmx/yr_now.html"
-     hx-trigger="every 1m"
+     hx-trigger="every 54s"
      hx-swap="outerHTML">
     <div class="row">
         <div class="col text-right">
@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col">
                     <p class="temperature text-end">
-                        {{ .yrNow.Temperature }} °C
+                        {{ .yrNow.Temperature }}°
                     </p>
                 </div>
             </div>

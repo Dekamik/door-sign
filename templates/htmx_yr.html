@@ -1,6 +1,6 @@
 <table class="table"
        hx-get="/htmx/yr.html"
-       hx-trigger="every 1m"
+       hx-trigger="every 15m"
        hx-swap="outerHTML">
     <thead>
     <tr>
@@ -11,7 +11,7 @@
     {{range .yr}}
     <tr style="height: 2em">
         <th scope="row">{{ .Time }}</th>
-        <td>{{ .Temperature }} °C</td>
+        <td>{{ .Temperature }}°</td>
         <td><img class="icon" src="../assets/images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg" alt="{{ .SymbolCode }}" /></td>
         <td>{{ .Precipitation }} mm</td>
     </tr>
