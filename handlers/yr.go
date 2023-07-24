@@ -5,7 +5,20 @@ import (
 	"door-sign/helpers"
 	"door-sign/integrations"
 	"log"
+	"time"
 )
+
+type YR interface {
+	GetCurrent(conf configuration.Config) YRForecast
+	GetForecasts(conf configuration.Config, maxLength int) []YRForecast
+}
+
+type YRImpl struct {
+	CacheLifetime  time.Duration
+	CachedResponse *Cache[*integrations.YRResponse]
+}
+
+var _ YR = &YRImpl{}
 
 type YRForecast struct {
 	Time          string
@@ -15,21 +28,49 @@ type YRForecast struct {
 	Precipitation float64
 }
 
-func GetNowcast() *YRForecast {
-	return nil
+type Cache[T any] struct {
+	ExpiresAt time.Time
+	Data      T
 }
 
-func UpdateYR(conf configuration.Config, maxLength int) []YRForecast {
+func (y *YRImpl) getForecasts(conf configuration.Config) *integrations.YRResponse {
+	if y.CachedResponse != nil && time.Now().Before(y.CachedResponse.ExpiresAt) {
+		log.Println("YR: Getting cached response")
+		return y.CachedResponse.Data
+	}
+
+	log.Println("YR: Getting new repsonse from met.no")
 	res, err := integrations.YRGetLocationForecast(conf.Weather.Lat, conf.Weather.Lon)
 	if err != nil {
 		log.Fatalln(err)
 	}
+	y.CachedResponse = &Cache[*integrations.YRResponse]{
+		ExpiresAt: time.Now().Add(y.CacheLifetime),
+		Data:      res,
+	}
+
+	return res
+}
+
+func (y *YRImpl) GetCurrent(conf configuration.Config) YRForecast {
+	res := y.getForecasts(conf)
+	latest := res.Properties.Timeseries[0]
+	return YRForecast{
+		Time:          latest.Time.Local().Format("15:04"),
+		Temperature:   latest.Data.Instant.Details.AirTemperature,
+		SymbolCode:    latest.Data.Next6Hours.Summary.SymbolCode,
+		SymbolID:      helpers.YRSymbolsID[latest.Data.Next6Hours.Summary.SymbolCode],
+		Precipitation: latest.Data.Next6Hours.Details.PrecipitationAmount,
+	}
+}
+
+func (y *YRImpl) GetForecasts(conf configuration.Config, maxLength int) []YRForecast {
+	res := y.getForecasts(conf)
 
 	forecasts := make([]YRForecast, 0)
-	for i, item := range res.Properties.Timeseries {
+	for _, item := range res.Properties.Timeseries {
 		time := item.Time.Local().Format("15:04")
-		if i != 0 &&
-			time != "00:00" &&
+		if time != "00:00" &&
 			time != "08:00" &&
 			time != "12:00" &&
 			time != "18:00" {
@@ -46,4 +87,11 @@ func UpdateYR(conf configuration.Config, maxLength int) []YRForecast {
 	}
 
 	return forecasts[0:maxLength]
+}
+
+func NewYR() YR {
+	return &YRImpl{
+		CacheLifetime:  time.Second * 50,
+		CachedResponse: nil,
+	}
 }

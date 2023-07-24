@@ -15,6 +15,7 @@ func main() {
 	var conf configuration.Config
 	conf = *conf.ReadYamlConfig()
 	siteID := handlers.GetSLSiteID(conf)
+	YR := handlers.NewYR()
 
 	router := gin.Default()
 
@@ -27,8 +28,8 @@ func main() {
 			"templates/htmx_yr.html"))
 		t.Execute(c.Writer, gin.H{
 			"time":  handlers.GetTime(),
-			"yr":    handlers.UpdateYR(conf, 4),
-			"yrNow": handlers.GetNowcast(),
+			"yr":    YR.GetForecasts(conf, 4),
+			"yrNow": YR.GetCurrent(conf),
 			"sl":    handlers.UpdateSL(conf, siteID, 4),
 		})
 	})
@@ -42,7 +43,7 @@ func main() {
 	router.GET("/htmx/yr_now.html", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(templateFS,
 			"templates/htmx_yr_now.html"))
-		t.Execute(c.Writer, gin.H{"yrNow": handlers.GetNowcast()})
+		t.Execute(c.Writer, gin.H{"yrNow": YR.GetCurrent(conf)})
 	})
 
 	router.GET("/htmx/sl.html", func(c *gin.Context) {
@@ -54,7 +55,7 @@ func main() {
 	router.GET("/htmx/yr.html", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(templateFS,
 			"templates/htmx_yr.html"))
-		t.Execute(c.Writer, gin.H{"yr": handlers.UpdateYR(conf, 4)})
+		t.Execute(c.Writer, gin.H{"yr": YR.GetForecasts(conf, 4)})
 	})
 
 	router.Static("/assets", "./assets")

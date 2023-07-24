@@ -4,7 +4,7 @@
 }
 
 .date {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 500;
 }
 
@@ -12,8 +12,18 @@
     height: 1.65rem;
 }
 
+.precipitation {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
 .row-upper {
     line-height: 0.7;
+}
+
+.temperature {
+    font-size: 4rem;
+    font-weight: 500;
 }
 
 .white {

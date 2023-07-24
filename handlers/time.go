@@ -13,7 +13,7 @@ type Time struct {
 func GetTime() Time {
 	now := time.Now().Local()
 	timeStr := now.Format("15:04")
-	dateStr := fmt.Sprintf("%s %s", getDayName(now), now.Format("02/01"))
+	dateStr := fmt.Sprintf("%s %s", getDayName(now), now.Format("2/1"))
 	return Time{
 		Time: timeStr,
 		Date: dateStr,

@@ -1,0 +1,27 @@
+<div hx-get="/htmx/yr_now.html"
+     hx-trigger="every 1m"
+     hx-swap="outerHTML">
+    <div class="row">
+        <div class="col text-right">
+            <p class="weather-symbol text-center">
+                <img src="../assets/images/weather/dist/light-mode/default/svg/{{ .yrNow.SymbolID }}.svg" alt="{{ .yr_now.SymbolCode }}" />
+            </p>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <p class="temperature text-end">
+                        {{ .yrNow.Temperature }} °C
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="precipitation text-end">
+                        {{ .yrNow.Precipitation }} mm
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
