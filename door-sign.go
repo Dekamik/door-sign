@@ -27,7 +27,7 @@ func main() {
 			"templates/htmx_time.html",
 			"templates/htmx_yr_now.html",
 			"templates/htmx_sl.html",
-			"templates/htmx_yr.html"))
+			"templates/htmx_yr_forecast.html"))
 		t.Execute(c.Writer, gin.H{
 			"nav":   "index",
 			"time":  handlers.GetTime(),
@@ -55,9 +55,9 @@ func main() {
 		t.Execute(c.Writer, gin.H{"sl": handlers.UpdateSL(conf, siteID, 4)})
 	})
 
-	router.GET("/htmx/yr.html", func(c *gin.Context) {
+	router.GET("/htmx/yr_forecast.html", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(templateFS,
-			"templates/htmx_yr.html"))
+			"templates/htmx_yr_forecast.html"))
 		t.Execute(c.Writer, gin.H{"yr": YR.GetForecasts(conf, 4)})
 	})
 
