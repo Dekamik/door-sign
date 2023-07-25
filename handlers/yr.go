@@ -69,15 +69,15 @@ func (y *YRImpl) GetForecasts(conf configuration.Config, maxLength int) []YRFore
 
 	forecasts := make([]YRForecast, 0)
 	for _, item := range res.Properties.Timeseries {
-		time := item.Time.Local().Format("15:04")
-		if time != "00:00" &&
-			time != "08:00" &&
-			time != "12:00" &&
-			time != "18:00" {
+		timeStr := item.Time.Local().Format("15")
+		if timeStr != "00" &&
+			timeStr != "06" &&
+			timeStr != "12" &&
+			timeStr != "18" {
 			continue
 		}
 		forecast := YRForecast{
-			Time:          time,
+			Time:          timeStr + "-" + item.Time.Local().Add(time.Hour*6).Format("15"),
 			Temperature:   item.Data.Instant.Details.AirTemperature,
 			SymbolCode:    item.Data.Next6Hours.Summary.SymbolCode,
 			SymbolID:      helpers.YRSymbolsID[item.Data.Next6Hours.Summary.SymbolCode],
