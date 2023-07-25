@@ -12,6 +12,10 @@
     height: 1.65rem;
 }
 
+.nav-spacing {
+    margin-right: 1.5rem;
+}
+
 .navbar-icon {
     font-size: 2rem;
 }

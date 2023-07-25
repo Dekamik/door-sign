@@ -22,6 +22,7 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(templateFS,
 			"templates/index.html",
+			"templates/htmx_navbar.html",
 			"templates/htmx_time.html",
 			"templates/htmx_yr_now.html",
 			"templates/htmx_sl.html",
