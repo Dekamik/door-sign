@@ -7,6 +7,9 @@
             <a {{ if eq .nav "weather" }}class="nav-link nav-spacing active" aria-current="page"{{ else }}class="nav-link nav-spacing"{{ end }} href="/weather">
                 <i class="bi bi-cloud-sun-fill navbar-icon"></i>
             </a>
+            <a {{ if eq .nav "grocy" }}class="nav-link nav-spacing active" aria-current="page"{{ else }}class="nav-link nav-spacing"{{ end }} href="/grocy">
+                <i class="bi bi-basket-fill navbar-icon"></i>
+            </a>
         </div>
     </div>
 </nav>
