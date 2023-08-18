@@ -71,16 +71,6 @@ func main() {
 		})
 	})
 
-	router.GET("/grocy", func(c *gin.Context) {
-		t := template.Must(template.ParseFS(templateFS,
-			"templates/grocy.html",
-			"templates/imports.html",
-			"templates/htmx_navbar.html"))
-		t.Execute(c.Writer, gin.H{
-			"nav": "grocy",
-		})
-	})
-
 	router.Static("/assets", "./assets")
 
 	router.Run()
