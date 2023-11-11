@@ -100,4 +100,4 @@ fabric.properties
 # Go workspace file
 go.work
 
-config.yml
+config.toml

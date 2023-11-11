@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"door-sign/configuration"
+	"door-sign/config"
 	"door-sign/helpers"
 	"door-sign/integrations"
 	"log"
@@ -22,7 +22,7 @@ func min(a, b int) int {
 	return b
 }
 
-func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDeparture {
+func UpdateSL(conf config.Config, siteId string, maxLength int) []SLDeparture {
 	res, err := integrations.SLGetDepartures(conf.Departures.SLDeparturesV4Key, siteId, 60)
 	if err != nil {
 		log.Fatalln(err)
@@ -68,7 +68,7 @@ func UpdateSL(conf configuration.Config, siteId string, maxLength int) []SLDepar
 	return departures[0:min(maxLength, len(departures))]
 }
 
-func GetSLSiteID(conf configuration.Config) string {
+func GetSLSiteID(conf config.Config) string {
 	escapedBusStop := url.QueryEscape(conf.Departures.BusStop)
 	res, err := integrations.SLStopLookup(conf.Departures.SLStopLookupV1Key, escapedBusStop, 1)
 	if err != nil {

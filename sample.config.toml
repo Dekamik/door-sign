@@ -1,0 +1,14 @@
+[App]
+Port = 8080
+
+[Departures]
+BusStop = "<location>"
+SLDeparturesV4Key = "<key>"
+SLServiceAlertsV2Key = "<key>"
+SLStopLookupV1Key = "<key>"
+SLStopsAndLinesV2Key = "<key>"
+
+[Weather]
+Lat = <int>
+Lon = <int>
+

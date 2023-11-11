@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"door-sign/configuration"
+	"door-sign/config"
 	"door-sign/helpers"
 	"door-sign/integrations"
 	"log"
@@ -9,8 +9,8 @@ import (
 )
 
 type YR interface {
-	GetCurrent(conf configuration.Config) YRForecast
-	GetForecasts(conf configuration.Config, maxLength int) []YRForecast
+	GetCurrent(conf config.Config) YRForecast
+	GetForecasts(conf config.Config, maxLength int) []YRForecast
 }
 
 type YRImpl struct {
@@ -33,7 +33,7 @@ type Cache[T any] struct {
 	Data      T
 }
 
-func (y *YRImpl) getForecasts(conf configuration.Config) *integrations.YRResponse {
+func (y *YRImpl) getForecasts(conf config.Config) *integrations.YRResponse {
 	if y.CachedResponse != nil && time.Now().Before(y.CachedResponse.ExpiresAt) {
 		log.Println("YR: Getting cached response")
 		return y.CachedResponse.Data
@@ -52,7 +52,7 @@ func (y *YRImpl) getForecasts(conf configuration.Config) *integrations.YRRespons
 	return res
 }
 
-func (y *YRImpl) GetCurrent(conf configuration.Config) YRForecast {
+func (y *YRImpl) GetCurrent(conf config.Config) YRForecast {
 	res := y.getForecasts(conf)
 	latest := res.Properties.Timeseries[0]
 	return YRForecast{
@@ -64,7 +64,7 @@ func (y *YRImpl) GetCurrent(conf configuration.Config) YRForecast {
 	}
 }
 
-func (y *YRImpl) GetForecasts(conf configuration.Config, maxLength int) []YRForecast {
+func (y *YRImpl) GetForecasts(conf config.Config, maxLength int) []YRForecast {
 	res := y.getForecasts(conf)
 
 	forecasts := make([]YRForecast, 0)

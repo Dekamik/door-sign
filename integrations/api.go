@@ -1,7 +1,7 @@
 package integrations
 
 import (
-	"door-sign/configuration"
+	"door-sign/config"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -19,7 +19,7 @@ func get[T any](url string) (*T, error) {
 
 func call[T any](req *http.Request) (*T, error) {
 	client := &http.Client{}
-	userAgent := fmt.Sprintf("door-sign/%s", configuration.ReadVersion())
+	userAgent := fmt.Sprintf("door-sign/%s", config.ReadVersion())
 	req.Header.Set("User-Agent", userAgent)
 
 	res, err := client.Do(req)

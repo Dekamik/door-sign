@@ -1,7 +1,7 @@
 package main
 
 import (
-	"door-sign/configuration"
+	"door-sign/config"
 	"door-sign/handlers"
 	"embed"
 	"github.com/gin-gonic/gin"
@@ -12,8 +12,7 @@ import (
 var templateFS embed.FS
 
 func main() {
-	var conf configuration.Config
-	conf = *conf.ReadYamlConfig()
+	conf := *config.ReadConfig()
 	siteID := handlers.GetSLSiteID(conf)
 	YR := handlers.NewYR()
 
