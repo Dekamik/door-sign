@@ -20,6 +20,17 @@ type Config struct {
 	Weather struct {
 		Lat float32
 		Lon float32
+		Colors struct {
+			TempQ1 float32
+			TempQ2 float32
+			TempQ3 float32
+			TempQ4 float32
+
+			ClassQ1 string
+			ClassQ2 string
+			ClassQ3 string
+			ClassQ4 string
+		}
 	}
 }
 

@@ -21,11 +21,12 @@ type YRImpl struct {
 var _ YR = &YRImpl{}
 
 type YRForecast struct {
-	Time          string
-	Temperature   float64
-	SymbolCode    string
-	SymbolID      string
-	Precipitation float64
+	Time             string
+	Temperature      float64
+	TemperatureColor string
+	SymbolCode       string
+	SymbolID         string
+	Precipitation    float64
 }
 
 type Cache[T any] struct {
@@ -52,15 +53,20 @@ func (y *YRImpl) getForecasts(conf config.Config) *integrations.YRResponse {
 	return res
 }
 
+func (y *YRImpl) getTemperatureColorClass(conf config.Config, temperature float64) string {
+	return ""
+}
+
 func (y *YRImpl) GetCurrent(conf config.Config) YRForecast {
 	res := y.getForecasts(conf)
 	latest := res.Properties.Timeseries[0]
 	return YRForecast{
-		Time:          latest.Time.Local().Format("15:04"),
-		Temperature:   latest.Data.Instant.Details.AirTemperature,
-		SymbolCode:    latest.Data.Next6Hours.Summary.SymbolCode,
-		SymbolID:      helpers.YRSymbolsID[latest.Data.Next6Hours.Summary.SymbolCode],
-		Precipitation: latest.Data.Next6Hours.Details.PrecipitationAmount,
+		Time:             latest.Time.Local().Format("15:04"),
+		Temperature:      latest.Data.Instant.Details.AirTemperature,
+		TemperatureColor: y.getTemperatureColorClass(conf, latest.Data.Instant.Details.AirTemperature),
+		SymbolCode:       latest.Data.Next6Hours.Summary.SymbolCode,
+		SymbolID:         helpers.YRSymbolsID[latest.Data.Next6Hours.Summary.SymbolCode],
+		Precipitation:    latest.Data.Next6Hours.Details.PrecipitationAmount,
 	}
 }
 
