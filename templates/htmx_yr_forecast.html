@@ -11,9 +11,9 @@
     {{range .yr}}
     <tr style="height: 2em">
         <th scope="row">{{ .Time }}</th>
-        <td>{{ .Temperature }}°</td>
+		<td class="text-{{ .TemperatureColor }}">{{ .Temperature }}°</td>
         <td><img class="icon" src="../assets/images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg" alt="{{ .SymbolCode }}" /></td>
-        <td>{{ .Precipitation }} mm</td>
+		<td class="text-{{ .PrecipitationColor }}">{{ .Precipitation }} mm</td>
     </tr>
     {{else}}
     <tr>

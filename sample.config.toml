@@ -12,3 +12,16 @@ SLStopsAndLinesV2Key = "<key>"
 Lat = <int>
 Lon = <int>
 
+[Weather.Colors]
+TempQ1 = <int>
+TempQ2 = <int>
+TempQ3 = <int>
+TempQ4 = <int>
+
+ClassQ1 = "info"
+ClassQ2 = "primary"
+ClassQ3 = "warning"
+ClassQ4 = "danger"
+
+ClassPrecip = "primary"
+ClassNoPrecip = "light"

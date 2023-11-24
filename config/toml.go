@@ -21,15 +21,18 @@ type Config struct {
 		Lat float32
 		Lon float32
 		Colors struct {
-			TempQ1 float32
-			TempQ2 float32
-			TempQ3 float32
-			TempQ4 float32
+			TempQ1 float64
+			TempQ2 float64
+			TempQ3 float64
+			TempQ4 float64
 
 			ClassQ1 string
 			ClassQ2 string
 			ClassQ3 string
 			ClassQ4 string
+
+			ClassPrecip string
+			ClassNoPrecip string
 		}
 	}
 }

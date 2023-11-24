@@ -101,3 +101,6 @@ fabric.properties
 go.work
 
 config.toml
+
+__debug_bin*
+/door-sign

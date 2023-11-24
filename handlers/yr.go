@@ -21,12 +21,13 @@ type YRImpl struct {
 var _ YR = &YRImpl{}
 
 type YRForecast struct {
-	Time             string
-	Temperature      float64
-	TemperatureColor string
-	SymbolCode       string
-	SymbolID         string
-	Precipitation    float64
+	Time               string
+	Temperature        float64
+	TemperatureColor   string
+	SymbolCode         string
+	SymbolID           string
+	Precipitation      float64
+	PrecipitationColor string
 }
 
 type Cache[T any] struct {
@@ -54,19 +55,43 @@ func (y *YRImpl) getForecasts(conf config.Config) *integrations.YRResponse {
 }
 
 func (y *YRImpl) getTemperatureColorClass(conf config.Config, temperature float64) string {
-	return ""
+	switch {
+
+	case temperature < conf.Weather.Colors.TempQ1:
+		return conf.Weather.Colors.ClassQ1
+
+	case temperature < conf.Weather.Colors.TempQ2:
+		return conf.Weather.Colors.ClassQ2
+
+	case temperature < conf.Weather.Colors.TempQ3:
+		return conf.Weather.Colors.ClassQ3
+
+	case temperature < conf.Weather.Colors.TempQ4:
+		return conf.Weather.Colors.ClassQ4
+
+	default:
+		return ""
+	}
+}
+
+func (y *YRImpl) getPrecipitationColorClass(conf config.Config, precipitation float64) string {
+	if precipitation > 0 {
+		return conf.Weather.Colors.ClassPrecip
+	}
+	return conf.Weather.Colors.ClassNoPrecip
 }
 
 func (y *YRImpl) GetCurrent(conf config.Config) YRForecast {
 	res := y.getForecasts(conf)
 	latest := res.Properties.Timeseries[0]
 	return YRForecast{
-		Time:             latest.Time.Local().Format("15:04"),
-		Temperature:      latest.Data.Instant.Details.AirTemperature,
-		TemperatureColor: y.getTemperatureColorClass(conf, latest.Data.Instant.Details.AirTemperature),
-		SymbolCode:       latest.Data.Next6Hours.Summary.SymbolCode,
-		SymbolID:         helpers.YRSymbolsID[latest.Data.Next6Hours.Summary.SymbolCode],
-		Precipitation:    latest.Data.Next6Hours.Details.PrecipitationAmount,
+		Time:               latest.Time.Local().Format("15:04"),
+		Temperature:        latest.Data.Instant.Details.AirTemperature,
+		TemperatureColor:   y.getTemperatureColorClass(conf, latest.Data.Instant.Details.AirTemperature),
+		SymbolCode:         latest.Data.Next6Hours.Summary.SymbolCode,
+		SymbolID:           helpers.YRSymbolsID[latest.Data.Next6Hours.Summary.SymbolCode],
+		Precipitation:      latest.Data.Next6Hours.Details.PrecipitationAmount,
+		PrecipitationColor: y.getPrecipitationColorClass(conf, latest.Data.Next6Hours.Details.PrecipitationAmount),
 	}
 }
 
@@ -85,9 +110,11 @@ func (y *YRImpl) GetForecasts(conf config.Config, maxLength int) []YRForecast {
 		forecast := YRForecast{
 			Time:          timeStr + "-" + item.Time.Local().Add(time.Hour*6).Format("15"),
 			Temperature:   item.Data.Instant.Details.AirTemperature,
+			TemperatureColor:   y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperature),
 			SymbolCode:    item.Data.Next6Hours.Summary.SymbolCode,
 			SymbolID:      helpers.YRSymbolsID[item.Data.Next6Hours.Summary.SymbolCode],
 			Precipitation: item.Data.Next6Hours.Details.PrecipitationAmount,
+			PrecipitationColor: y.getPrecipitationColorClass(conf, item.Data.Next6Hours.Details.PrecipitationAmount),
 		}
 		forecasts = append(forecasts, forecast)
 	}

@@ -10,14 +10,14 @@
         <div class="col">
             <div class="row">
                 <div class="col">
-                    <p class="temperature text-end">
+					<p class="temperature text-end text-{{ .yrNow.TemperatureColor }}">
                         {{ .yrNow.Temperature }}°
                     </p>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <p class="precipitation text-end">
+					<p class="precipitation text-end text-{{ .yrNow.PrecipitationColor }}">
                         {{ .yrNow.Precipitation }} mm
                     </p>
                 </div>
