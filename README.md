@@ -1,5 +1,8 @@
 # door-sign
 
+A small digital signage application for Raspberry PI touch screen that display
+date and time, real-time public transport departures and weather forecasts.
+
 # Credits
 
 <a href="https://www.met.no">Weather icons created by Metrologisk institutt</a>
