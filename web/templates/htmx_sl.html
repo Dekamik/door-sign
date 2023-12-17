@@ -9,7 +9,7 @@
     </thead>
     <tbody>
 		{{range .sl}}
-		<tr>
+		<tr stype="height: 2em">
 			<td>
 				<img class="icon white"
 					 src="../images/directions/{{ .TransportMode }}.png"
@@ -24,7 +24,7 @@
 			<th scope="row">{{ .DisplayTime }}</th>
 		</tr>
 		{{else}}
-		<tr>
+		<tr stype="height: 2em">
 			<td colspan="4">No data</td>
 		</tr>
 		{{end}}
