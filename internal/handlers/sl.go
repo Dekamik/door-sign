@@ -30,22 +30,20 @@ func min(a, b int) int {
 	return b
 }
 
-func formatDisplayTime(original string) string {
-	result := original
+func formatDisplayTime(displayTime string, expectedAt string) string {
+	result := displayTime
 	re := regexp.MustCompile(`\d\d:\d\d`)
 
-	if re.MatchString(original) {
-		now, err := time.Parse("15:04", time.Now().Format("15:04"))
+	if re.MatchString(displayTime) {
+		now := time.Now()
+
+		time, err := time.ParseInLocation("2006-01-02T15:04:05", expectedAt, time.Local)
 		if err != nil {
 			return "err 1"
 		}
 
-		time, err := time.Parse("15:04", original)
-		if err != nil {
-			return "err 2"
-		}
-
-		mins := time.Sub(now).Minutes()
+		localTime := time.Local()
+		mins := localTime.Sub(now).Minutes()
 
 		if mins <= 1 {
 			result = "1 min"
@@ -70,7 +68,7 @@ func UpdateSL(conf config.Config, siteId string, maxLength int) SLDepartures {
 			TransportMode: helpers.SLTransportModeIcons[item.TransportMode],
 			LineNumber:    item.LineNumber,
 			Destination:   item.Destination,
-			DisplayTime:   formatDisplayTime(item.DisplayTime),
+			DisplayTime:   formatDisplayTime(item.DisplayTime, item.ExpectedDateTime),
 		}
 		departures = append(departures, departure)
 	}
@@ -80,7 +78,7 @@ func UpdateSL(conf config.Config, siteId string, maxLength int) SLDepartures {
 			TransportMode: helpers.SLTransportModeIcons[item.TransportMode],
 			LineNumber:    item.LineNumber,
 			Destination:   item.Destination,
-			DisplayTime:   formatDisplayTime(item.DisplayTime),
+			DisplayTime:   formatDisplayTime(item.DisplayTime, *item.ExpectedDateTime),
 		}
 		departures = append(departures, departure)
 	}
@@ -90,7 +88,7 @@ func UpdateSL(conf config.Config, siteId string, maxLength int) SLDepartures {
 			TransportMode: helpers.SLTransportModeIcons[item.TransportMode],
 			LineNumber:    item.LineNumber,
 			Destination:   item.Destination,
-			DisplayTime:   formatDisplayTime(item.DisplayTime),
+			DisplayTime:   formatDisplayTime(item.DisplayTime, item.ExpectedDateTime),
 		}
 		departures = append(departures, departure)
 	}
@@ -100,7 +98,7 @@ func UpdateSL(conf config.Config, siteId string, maxLength int) SLDepartures {
 			TransportMode: helpers.SLTransportModeIcons[item.TransportMode],
 			LineNumber:    item.LineNumber,
 			Destination:   item.Destination,
-			DisplayTime:   formatDisplayTime(item.DisplayTime),
+			DisplayTime:   formatDisplayTime(item.DisplayTime, item.ExpectedDateTime),
 		}
 		departures = append(departures, departure)
 	}
