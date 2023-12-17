@@ -64,9 +64,21 @@ func main() {
 		t := template.Must(template.ParseFS(web.TemplateFS,
 			"templates/weather.html",
 			"templates/imports.html",
-			"templates/htmx_navbar.html"))
+			"templates/htmx_navbar.html",
+			"templates/htmx_yr_full_forecast.html"))
 		t.Execute(c.Writer, gin.H{
 			"nav": "weather",
+			"yr": YR.GetFullForecasts(conf),
+		})
+	})
+
+	router.GET("/disruptions", func(c *gin.Context) {
+		t := template.Must(template.ParseFS(web.TemplateFS,
+			"templates/disruptions.html",
+			"templates/imports.html",
+			"templates/htmx_navbar.html"))
+		t.Execute(c.Writer, gin.H{
+			"nav": "disruptions",
 		})
 	})
 

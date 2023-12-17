@@ -19,9 +19,9 @@ type SLStopLookupResponse struct {
 }
 
 type SLDeparturesResponse struct {
-	StatusCode    int         `json:"StatusCode"`
-	Message       interface{} `json:"Message"`
-	ExecutionTime int         `json:"ExecutionTime"`
+	StatusCode    int    `json:"StatusCode"`
+	Message       string `json:"Message"`
+	ExecutionTime int    `json:"ExecutionTime"`
 	ResponseData  struct {
 		LatestUpdate string `json:"LatestUpdate"`
 		DataAge      int    `json:"DataAge"`

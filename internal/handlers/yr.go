@@ -11,11 +11,12 @@ import (
 type YR interface {
 	GetCurrent(conf config.Config) YRForecast
 	GetForecasts(conf config.Config, maxLength int) []YRForecast
+	GetFullForecasts(conf config.Config) []YRFullForecast
 }
 
 type YRImpl struct {
-	CacheLifetime  time.Duration
-	CachedResponse *Cache[*integrations.YRResponse]
+	CacheLifetime          time.Duration
+	CachedForecastResponse *Cache[*integrations.YRResponse]
 }
 
 var _ YR = &YRImpl{}
@@ -30,15 +31,51 @@ type YRForecast struct {
 	PrecipitationColor string
 }
 
+type YRFullForecast struct {
+	Time                     string
+	AirPressureAtSeaLevel    float64
+	Temperature              float64
+	TemperatureColor         string
+	TemperatureMax           float64
+	TemperatureMaxColor      string
+	TemperatureMin           float64
+	TemperatureMinColor      string
+	DewPointTemperature      float64
+	DewPointTemperatureColor string
+	CloudAreaFraction        float64
+	CloudAreaFractionHigh    float64
+	CloudAreaFractionLow     float64
+	CloudAreaFractionMedium  float64
+	FogAreaFraction          float64
+	RelativeHumidity         float64
+	UltravioletIndexClearSky float64
+	WindFromDirection        float64
+	WindSpeed                float64
+	WindSpeedOfGust          float64
+	WindSpeedPercentile10    float64
+	WindSpeedPercentile90    float64
+	SymbolName               string
+	SymbolCode               string
+	SymbolID                 string
+	Precipitation            float64
+	PrecipitationColor       string
+	PrecipitationMax         float64
+	PrecipitationMaxColor    string
+	PrecipitationMin         float64
+	PrecipitationMinColor    string
+	PrecipitationChance      float64
+	ThunderChance            float64
+}
+
 type Cache[T any] struct {
 	ExpiresAt time.Time
 	Data      T
 }
 
 func (y *YRImpl) getForecasts(conf config.Config) *integrations.YRResponse {
-	if y.CachedResponse != nil && time.Now().Before(y.CachedResponse.ExpiresAt) {
+	if y.CachedForecastResponse != nil && time.Now().Before(y.CachedForecastResponse.ExpiresAt) {
 		log.Println("YR: Getting cached response")
-		return y.CachedResponse.Data
+		return y.CachedForecastResponse.Data
 	}
 
 	log.Println("YR: Getting new repsonse from met.no")
@@ -46,7 +83,7 @@ func (y *YRImpl) getForecasts(conf config.Config) *integrations.YRResponse {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	y.CachedResponse = &Cache[*integrations.YRResponse]{
+	y.CachedForecastResponse = &Cache[*integrations.YRResponse]{
 		ExpiresAt: time.Now().Add(y.CacheLifetime),
 		Data:      res,
 	}
@@ -122,9 +159,55 @@ func (y *YRImpl) GetForecasts(conf config.Config, maxLength int) []YRForecast {
 	return forecasts[0:maxLength]
 }
 
+func (y *YRImpl) GetFullForecasts(conf config.Config) []YRFullForecast {
+	res := y.getForecasts(conf)
+
+	forecasts := []YRFullForecast{}
+	for _, item := range res.Properties.Timeseries {
+		forecast := YRFullForecast{
+			Time:                     item.Time.Local().Format("15:04 - 2/1"),
+			AirPressureAtSeaLevel:    item.Data.Instant.Details.AirPressureAtSeaLevel,
+			Temperature:              item.Data.Instant.Details.AirTemperature,
+			TemperatureColor:         y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperature),
+			TemperatureMax:           item.Data.Instant.Details.AirTemperaturePercentile90,
+			TemperatureMaxColor:      y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperaturePercentile90),
+			TemperatureMin:           item.Data.Instant.Details.AirTemperaturePercentile10,
+			TemperatureMinColor:      y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperaturePercentile10),
+			DewPointTemperature:      item.Data.Instant.Details.DewPointTemperature,
+			DewPointTemperatureColor: y.getTemperatureColorClass(conf, item.Data.Instant.Details.DewPointTemperature),
+			CloudAreaFraction:        item.Data.Instant.Details.CloudAreaFraction,
+			CloudAreaFractionHigh:    item.Data.Instant.Details.CloudAreaFractionHigh,
+			CloudAreaFractionLow:     item.Data.Instant.Details.CloudAreaFractionLow,
+			CloudAreaFractionMedium:  item.Data.Instant.Details.CloudAreaFractionMedium,
+			FogAreaFraction:          item.Data.Instant.Details.FogAreaFraction,
+			RelativeHumidity:         item.Data.Instant.Details.RelativeHumidity,
+			UltravioletIndexClearSky: item.Data.Instant.Details.UltravioletIndexClearSky,
+			WindFromDirection:        item.Data.Instant.Details.WindFromDirection,
+			WindSpeed:                item.Data.Instant.Details.WindSpeed,
+			WindSpeedOfGust:          item.Data.Instant.Details.WindSpeedOfGust,
+			WindSpeedPercentile10:    item.Data.Instant.Details.WindSpeedPercentile10,
+			WindSpeedPercentile90:    item.Data.Instant.Details.WindSpeedPercentile90,
+			SymbolName:               helpers.Capitalize(item.Data.Next1Hours.Summary.SymbolCode),
+			SymbolCode:               item.Data.Next1Hours.Summary.SymbolCode,
+			SymbolID:                 helpers.YRSymbolsID[item.Data.Next1Hours.Summary.SymbolCode],
+			Precipitation:            item.Data.Next1Hours.Details.PrecipitationAmount,
+			PrecipitationColor:       y.getPrecipitationColorClass(conf, item.Data.Next1Hours.Details.PrecipitationAmount),
+			PrecipitationMax:         item.Data.Next1Hours.Details.PrecipitationAmountMax,
+			PrecipitationMaxColor:    y.getPrecipitationColorClass(conf, item.Data.Next1Hours.Details.PrecipitationAmountMax),
+			PrecipitationMin:         item.Data.Next1Hours.Details.PrecipitationAmountMin,
+			PrecipitationMinColor:    y.getPrecipitationColorClass(conf, item.Data.Next1Hours.Details.PrecipitationAmountMin),
+			PrecipitationChance:      item.Data.Next1Hours.Details.ProbabilityOfPrecipitation,
+			ThunderChance:            item.Data.Next1Hours.Details.ProbabilityOfThunder,
+		}
+		forecasts = append(forecasts, forecast)
+	}
+
+	return forecasts
+}
+
 func NewYR() YR {
 	return &YRImpl{
-		CacheLifetime:  time.Minute * 5,
-		CachedResponse: nil,
+		CacheLifetime:          time.Minute * 5,
+		CachedForecastResponse: nil,
 	}
 }
