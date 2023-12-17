@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"door-sign/config"
-	"door-sign/helpers"
-	"door-sign/integrations"
+	"door-sign/internal/config"
+	"door-sign/internal/helpers"
+	"door-sign/internal/integrations"
 	"log"
 	"time"
 )
@@ -108,12 +108,12 @@ func (y *YRImpl) GetForecasts(conf config.Config, maxLength int) []YRForecast {
 			continue
 		}
 		forecast := YRForecast{
-			Time:          timeStr + "-" + item.Time.Local().Add(time.Hour*6).Format("15"),
-			Temperature:   item.Data.Instant.Details.AirTemperature,
+			Time:               timeStr + "-" + item.Time.Local().Add(time.Hour*6).Format("15"),
+			Temperature:        item.Data.Instant.Details.AirTemperature,
 			TemperatureColor:   y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperature),
-			SymbolCode:    item.Data.Next6Hours.Summary.SymbolCode,
-			SymbolID:      helpers.YRSymbolsID[item.Data.Next6Hours.Summary.SymbolCode],
-			Precipitation: item.Data.Next6Hours.Details.PrecipitationAmount,
+			SymbolCode:         item.Data.Next6Hours.Summary.SymbolCode,
+			SymbolID:           helpers.YRSymbolsID[item.Data.Next6Hours.Summary.SymbolCode],
+			Precipitation:      item.Data.Next6Hours.Details.PrecipitationAmount,
 			PrecipitationColor: y.getPrecipitationColorClass(conf, item.Data.Next6Hours.Details.PrecipitationAmount),
 		}
 		forecasts = append(forecasts, forecast)

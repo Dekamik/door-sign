@@ -1,7 +1,7 @@
 package integrations
 
 import (
-	"door-sign/config"
+	"door-sign/internal/config"
 	"encoding/json"
 	"fmt"
 	"io"

@@ -12,7 +12,7 @@
     <tr style="height: 2em">
         <th scope="row">{{ .Time }}</th>
 		<td class="text-{{ .TemperatureColor }}">{{ .Temperature }}°</td>
-        <td><img class="icon" src="../assets/images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg" alt="{{ .SymbolCode }}" /></td>
+        <td><img class="icon" src="../images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg" alt="{{ .SymbolCode }}" /></td>
 		<td class="text-{{ .PrecipitationColor }}">{{ .Precipitation }} mm</td>
     </tr>
     {{else}}

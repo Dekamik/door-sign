@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"door-sign/config"
-	"door-sign/helpers"
-	"door-sign/integrations"
+	"door-sign/internal/config"
+	"door-sign/internal/helpers"
+	"door-sign/internal/integrations"
 	"log"
 	"net/url"
 )
