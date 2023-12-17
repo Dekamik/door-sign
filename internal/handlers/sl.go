@@ -105,8 +105,13 @@ func UpdateSL(conf config.Config, siteId string, maxLength int) SLDepartures {
 		departures = append(departures, departure)
 	}
 
+	message := res.Message
+	if message == "" {
+		message = "No data"
+	}
+
 	return SLDepartures{
-		ErrorMessage: res.Message,
+		ErrorMessage: message,
 		Departures: departures[0:min(maxLength, len(departures))],
 	}
 }
