@@ -3,22 +3,26 @@
        hx-trigger="every 15m"
        hx-swap="outerHTML">
     <thead>
-    <tr>
-        <th class="text-end" scope="col" colspan="4">Väderleksrapport</th>
-    </tr>
+		<tr>
+			<th class="text-end" scope="col" colspan="4">Väderleksrapport</th>
+		</tr>
     </thead>
     <tbody>
-    {{range .yr}}
-    <tr style="height: 2em">
-        <th scope="row">{{ .Time }}</th>
-		<td class="text-{{ .TemperatureColor }}">{{ .Temperature }}°</td>
-        <td><img class="icon" src="../images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg" alt="{{ .SymbolCode }}" /></td>
-		<td class="text-{{ .PrecipitationColor }}">{{ .Precipitation }} mm</td>
-    </tr>
-    {{else}}
-    <tr>
-        <td colspan="4">No data</td>
-    </tr>
-    {{end}}
+		{{range .yr}}
+		<tr style="height: 2em">
+			<th scope="row">{{ .Time }}</th>
+			<td class="text-{{ .TemperatureColor }}">{{ .Temperature }}°</td>
+			<td>
+				<img class="icon"
+					 src="../images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg"
+					 alt="{{ .SymbolCode }}" />
+			</td>
+			<td class="text-{{ .PrecipitationColor }}">{{ .Precipitation }} mm</td>
+		</tr>
+		{{else}}
+		<tr>
+			<td colspan="4">No data</td>
+		</tr>
+		{{end}}
     </tbody>
 </table>

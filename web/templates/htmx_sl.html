@@ -3,22 +3,30 @@
        hx-trigger="every 15s"
        hx-swap="outerHTML">
     <thead>
-    <tr>
-        <th scope="col" colspan="4">Avgångar</th>
-    </tr>
+		<tr>
+			<th scope="col" colspan="4">Avgångar</th>
+		</tr>
     </thead>
     <tbody>
-    {{range .sl}}
-    <tr>
-        <td><img class="icon white" src="../images/directions/{{ .TransportMode }}.png" alt="{{ .TransportMode }}" /></td>
-        <td>{{ .LineNumber }}</td>
-        <td>{{ .Destination }}</td>
-        <th scope="row">{{ .DisplayTime }}</th>
-    </tr>
-    {{else}}
-    <tr>
-        <td colspan="4">No data</td>
-    </tr>
-    {{end}}
+		{{range .sl}}
+		<tr>
+			<td>
+				<img class="icon white"
+					 src="../images/directions/{{ .TransportMode }}.png"
+					 alt="{{ .TransportMode }}" />
+			</td>
+			<td>
+				<span class="badge bg-danger">
+					{{ .LineNumber }}
+				</span>
+			</td>
+			<td>{{ .Destination }}</td>
+			<th scope="row">{{ .DisplayTime }}</th>
+		</tr>
+		{{else}}
+		<tr>
+			<td colspan="4">No data</td>
+		</tr>
+		{{end}}
     </tbody>
 </table>
