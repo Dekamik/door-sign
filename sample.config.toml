@@ -18,8 +18,8 @@ TempQ2 = <int>
 TempQ3 = <int>
 TempQ4 = <int>
 
-ClassQ1 = "info"
-ClassQ2 = "primary"
+ClassQ1 = "primary"
+ClassQ2 = "info"
 ClassQ3 = "warning"
 ClassQ4 = "danger"
 
