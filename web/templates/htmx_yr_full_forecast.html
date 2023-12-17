@@ -1,0 +1,189 @@
+<div class="accordion accordion-flush" id="weather">
+	{{range $i, $item := .yr}}
+	<div class="accordion-item">
+		<h2 class="accordion-header">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#weather_{{printf "%d" $i}}" aria-expanded="false" aria-controls="weather_{{printf "%d" $i}}">
+				<span class="w-25">
+					{{ $item.Time }}&nbsp;
+				</span>
+				<span class="w-25 text-{{ $item.TemperatureColor }}">
+					{{ $item.Temperature }}°&nbsp;
+				</span>
+				<span class="w-25">
+					<img class="icon"
+						 src="../images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg"
+						 alt="{{ .SymbolCode }}" />
+				</span>
+				<span class="w-25 text-{{ .PrecipitationColor }}">
+					{{ $item.Precipitation }} mm&nbsp;
+				</span>
+			</button>
+		</h2>
+		<div id="weather_{{printf "%d" $i}}" class="accordion-collapse collapse" data-bs-parent="#weather">
+			<div class="accordion-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>
+								Measure
+							</th>
+							<td>
+								Value
+							</td>
+							<td>
+								Min
+							</td>
+							<td>
+								Max
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>
+								Temperature (Dew point)
+							</th>
+							<td class="text-{{ $item.TemperatureColor }}">
+								{{ $item.Temperature }}° <span class="text-{{ $item.DewPointTemperatureColor }}">({{ $item.DewPointTemperature }}°)</span>
+							</td>
+							<td class="text-{{ $item.TemperatureMinColor }}">
+								{{ $item.TemperatureMin }}°
+							</td>
+							<td class="text-{{ $item.TemperatureMaxColor }}">
+								{{ $item.TemperatureMax }}°
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Precipitation
+							</th>
+							<td class="text-{{ $item.PrecipitationColor }}">
+								{{ $item.Precipitation }} mm
+							</td>
+							<td class="text-{{ $item.PrecipitationMinColor }}">
+								{{ $item.PrecipitationMin }} mm
+							</td>
+							<td class="text-{{ $item.PrecipitationMaxColor }}">
+								{{ $item.PrecipitationMax }} mm
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Relative humidity
+							</th>
+							<td>
+								{{ $item.RelativeHumidity }} %
+							</td>
+							<td>
+								-
+							</td>
+							<td>
+								-
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Air pressure at sea level
+							</th>
+							<td>
+								{{ $item.AirPressureAtSeaLevel }} hPa
+							</td>
+							<td>
+								-
+							</td>
+							<td>
+								-
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Ultraviolet Index
+							</th>
+							<td>
+								{{ $item.UltravioletIndexClearSky }}
+							</td>
+							<td>
+								-
+							</td>
+							<td>
+								-
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Probability of Precipitation
+							</th>
+							<td>
+								{{ $item.PrecipitationChance }}
+							</td>
+							<td>
+								-
+							</td>
+							<td>
+								-
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Probability of Thunder
+							</th>
+							<td>
+								{{ $item.ThunderChance }}
+							</td>
+							<td>
+								-
+							</td>
+							<td>
+								-
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Wind (direction / gust)
+							</th>
+							<td>
+								{{ $item.WindSpeed }} m/s ({{ $item.WindFromDirection }}° / {{ $item.WindSpeedOfGust }} m/s)
+							</td>
+							<td>
+								{{ $item.WindSpeedPercentile10 }} m/s
+							</td>
+							<td>
+								{{ $item.WindSpeedPercentile90  }} m/s
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Cloud Area Fraction (medium)
+							</th>
+							<td>
+								{{ $item.CloudAreaFraction }} % ({{ $item.CloudAreaFractionMedium }} %)
+							</td>
+							<td>
+								{{ $item.CloudAreaFractionLow }} %
+							</td>
+							<td>
+								{{ $item.CloudAreaFractionHigh }} %
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Fog Area Fraction
+							</th>
+							<td>
+								{{ $item.FogAreaFraction }} %
+							</td>
+							<td>
+								-
+							</td>
+							<td>
+								-
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	{{else}}
+	{{end}}
+</div>
