@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	const rowCount int = 4
+
 	conf := *config.ReadConfig()
 	siteID := handlers.GetSLSiteID(conf)
 	YR := handlers.NewYR()
@@ -28,9 +30,9 @@ func main() {
 		t.Execute(c.Writer, gin.H{
 			"nav":   "index",
 			"time":  handlers.GetTime(),
-			"yr":    YR.GetForecasts(conf, 4),
+			"yr":    YR.GetForecasts(conf, rowCount),
 			"yrNow": YR.GetCurrent(conf),
-			"sl":    handlers.UpdateSL(conf, siteID, 4),
+			"sl":    handlers.UpdateSL(conf, siteID, rowCount),
 		})
 	})
 
@@ -49,13 +51,13 @@ func main() {
 	router.GET("/htmx/sl.html", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(web.TemplateFS,
 			"templates/htmx_sl.html"))
-		t.Execute(c.Writer, gin.H{"sl": handlers.UpdateSL(conf, siteID, 4)})
+		t.Execute(c.Writer, gin.H{"sl": handlers.UpdateSL(conf, siteID, rowCount)})
 	})
 
 	router.GET("/htmx/yr_forecast.html", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(web.TemplateFS,
 			"templates/htmx_yr_forecast.html"))
-		t.Execute(c.Writer, gin.H{"yr": YR.GetForecasts(conf, 4)})
+		t.Execute(c.Writer, gin.H{"yr": YR.GetForecasts(conf, rowCount)})
 	})
 
 	router.GET("/weather", func(c *gin.Context) {
