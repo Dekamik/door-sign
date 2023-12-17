@@ -42,9 +42,7 @@ func formatDisplayTime(displayTime string, expectedAt string) string {
 			return "err 1"
 		}
 
-		localTime := time.Local()
-		mins := localTime.Sub(now).Minutes()
-
+		mins := time.Local().Sub(now).Minutes()
 		if mins <= 1 {
 			result = "1 min"
 		} else if mins <= 30 {
