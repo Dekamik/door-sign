@@ -21,6 +21,8 @@ type Config struct {
 		Lat float32
 		Lon float32
 		Colors struct {
+			TempMin string
+			TempMax string
 			TempQ1 float64
 			TempQ2 float64
 			TempQ3 float64
