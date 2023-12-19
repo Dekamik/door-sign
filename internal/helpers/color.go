@@ -25,3 +25,32 @@ func ParseHexToColor(s string) (c color.RGBA, err error) {
 
 	return
 }
+
+func HexString(c color.RGBA) string {
+	return fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B)
+}
+
+func Lerp(min color.RGBA, max color.RGBA, value float64) color.RGBA {
+	return color.RGBA{
+		R: uint8(float64(min.R)*(1-value) + float64(max.R)*value),
+		G: uint8(float64(min.G)*(1-value) + float64(max.G)*value),
+		B: uint8(float64(min.B)*(1-value) + float64(max.B)*value),
+		A: 0xff,
+	}
+}
+
+func LerpHexString(min string, max string, value float64) (string, error) {
+	minC, err := ParseHexToColor(min)
+	if err != nil {
+		return "", err
+	}
+
+	maxC, err := ParseHexToColor(max)
+	if err != nil {
+		return "", err
+	}
+
+	c := Lerp(minC, maxC, value)
+
+	return HexString(c), nil
+}
