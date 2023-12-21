@@ -5,6 +5,8 @@ import (
 	"door-sign/internal/helpers"
 	"door-sign/internal/integrations"
 	"log"
+	"log/slog"
+	"math"
 	"time"
 )
 
@@ -91,24 +93,39 @@ func (y *YRImpl) getForecasts(conf config.Config) *integrations.YRResponse {
 	return res
 }
 
-func (y *YRImpl) getTemperatureColorClass(conf config.Config, temperature float64) string {
-	switch {
-
-	case temperature < conf.Weather.Colors.TempQ1:
-		return conf.Weather.Colors.ClassQ1
-
-	case temperature < conf.Weather.Colors.TempQ2:
-		return conf.Weather.Colors.ClassQ2
-
-	case temperature < conf.Weather.Colors.TempQ3:
-		return conf.Weather.Colors.ClassQ3
-
-	case temperature < conf.Weather.Colors.TempQ4:
-		return conf.Weather.Colors.ClassQ4
-
-	default:
-		return ""
+func (y *YRImpl) getTemperatureColor(conf config.Config, temperature float64) string {
+	if temperature == conf.Weather.Colors.TempMid {
+		return conf.Weather.Colors.TempColorMid
+	} else if temperature <= conf.Weather.Colors.TempMin {
+		return conf.Weather.Colors.TempColorCoolCoolest
+	} else if temperature >= conf.Weather.Colors.TempMax {
+		return conf.Weather.Colors.TempColorHotHottest
 	}
+
+	if temperature > conf.Weather.Colors.TempMid {
+		value := math.Abs(temperature / conf.Weather.Colors.TempMax)
+
+		c, err := helpers.LerpHexString(conf.Weather.Colors.TempColorHotCoolest,
+			conf.Weather.Colors.TempColorHotHottest, value)
+		if err != nil {
+			slog.Error("error occurred when lerping colors", "err", err)
+			return conf.Weather.Colors.TempColorMid
+		}
+
+		return c
+
+	}
+
+	value := math.Abs(temperature / conf.Weather.Colors.TempMin)
+
+	c, err := helpers.LerpHexString(conf.Weather.Colors.TempColorCoolHottest,
+		conf.Weather.Colors.TempColorCoolCoolest, value)
+	if err != nil {
+		slog.Error("error occurred when lerping colors", "err", err)
+		return conf.Weather.Colors.TempColorMid
+	}
+
+	return c
 }
 
 func (y *YRImpl) getPrecipitationColorClass(conf config.Config, precipitation float64) string {
@@ -124,7 +141,7 @@ func (y *YRImpl) GetCurrent(conf config.Config) YRForecast {
 	return YRForecast{
 		Time:               latest.Time.Local().Format("15:04"),
 		Temperature:        latest.Data.Instant.Details.AirTemperature,
-		TemperatureColor:   y.getTemperatureColorClass(conf, latest.Data.Instant.Details.AirTemperature),
+		TemperatureColor:   y.getTemperatureColor(conf, latest.Data.Instant.Details.AirTemperature),
 		SymbolCode:         latest.Data.Next6Hours.Summary.SymbolCode,
 		SymbolID:           helpers.YRSymbolsID[latest.Data.Next6Hours.Summary.SymbolCode],
 		Precipitation:      latest.Data.Next6Hours.Details.PrecipitationAmount,
@@ -147,7 +164,7 @@ func (y *YRImpl) GetForecasts(conf config.Config, maxLength int) []YRForecast {
 		forecast := YRForecast{
 			Time:               timeStr + "-" + item.Time.Local().Add(time.Hour*6).Format("15"),
 			Temperature:        item.Data.Instant.Details.AirTemperature,
-			TemperatureColor:   y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperature),
+			TemperatureColor:   y.getTemperatureColor(conf, item.Data.Instant.Details.AirTemperature),
 			SymbolCode:         item.Data.Next6Hours.Summary.SymbolCode,
 			SymbolID:           helpers.YRSymbolsID[item.Data.Next6Hours.Summary.SymbolCode],
 			Precipitation:      item.Data.Next6Hours.Details.PrecipitationAmount,
@@ -168,13 +185,13 @@ func (y *YRImpl) GetFullForecasts(conf config.Config) []YRFullForecast {
 			Time:                     item.Time.Local().Format("15:04 - 2/1"),
 			AirPressureAtSeaLevel:    item.Data.Instant.Details.AirPressureAtSeaLevel,
 			Temperature:              item.Data.Instant.Details.AirTemperature,
-			TemperatureColor:         y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperature),
+			TemperatureColor:         y.getTemperatureColor(conf, item.Data.Instant.Details.AirTemperature),
 			TemperatureMax:           item.Data.Instant.Details.AirTemperaturePercentile90,
-			TemperatureMaxColor:      y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperaturePercentile90),
+			TemperatureMaxColor:      y.getTemperatureColor(conf, item.Data.Instant.Details.AirTemperaturePercentile90),
 			TemperatureMin:           item.Data.Instant.Details.AirTemperaturePercentile10,
-			TemperatureMinColor:      y.getTemperatureColorClass(conf, item.Data.Instant.Details.AirTemperaturePercentile10),
+			TemperatureMinColor:      y.getTemperatureColor(conf, item.Data.Instant.Details.AirTemperaturePercentile10),
 			DewPointTemperature:      item.Data.Instant.Details.DewPointTemperature,
-			DewPointTemperatureColor: y.getTemperatureColorClass(conf, item.Data.Instant.Details.DewPointTemperature),
+			DewPointTemperatureColor: y.getTemperatureColor(conf, item.Data.Instant.Details.DewPointTemperature),
 			CloudAreaFraction:        item.Data.Instant.Details.CloudAreaFraction,
 			CloudAreaFractionHigh:    item.Data.Instant.Details.CloudAreaFractionHigh,
 			CloudAreaFractionLow:     item.Data.Instant.Details.CloudAreaFractionLow,

@@ -13,15 +13,15 @@ Lat = <int>
 Lon = <int>
 
 [Weather.Colors]
-TempQ1 = <int>
-TempQ2 = <int>
-TempQ3 = <int>
-TempQ4 = <int>
+TempMin = -20
+TempMid = 0
+TempMax = 25
 
-ClassQ1 = "primary"
-ClassQ2 = "info"
-ClassQ3 = "warning"
-ClassQ4 = "danger"
+TempColorCoolCoolest = "#0033cc"
+TempColorCoolHottest = "#ccd9ff"
+TempColorMid = "#dee2e6"
+TempColorHotCoolest = "#ffcccc"
+TempColorHotHottest = "#990000"
 
 ClassPrecip = "primary"
 ClassNoPrecip = "light"

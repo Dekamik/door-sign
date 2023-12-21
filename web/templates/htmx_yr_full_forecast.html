@@ -6,7 +6,7 @@
 				<span class="w-25">
 					{{ $item.Time }}&nbsp;
 				</span>
-				<span class="w-25 text-{{ $item.TemperatureColor }}">
+				<span class="w-25" style="color: {{ $item.TemperatureColor }}">
 					{{ $item.Temperature }}°&nbsp;
 				</span>
 				<span class="w-25">
@@ -43,13 +43,13 @@
 							<th>
 								Temperature (Dew point)
 							</th>
-							<td class="text-{{ $item.TemperatureColor }}">
-								{{ $item.Temperature }}° <span class="text-{{ $item.DewPointTemperatureColor }}">({{ $item.DewPointTemperature }}°)</span>
+							<td style="color: {{ $item.TemperatureColor }}">
+								{{ $item.Temperature }}° <span style="color: {{ $item.DewPointTemperatureColor }}">({{ $item.DewPointTemperature }}°)</span>
 							</td>
-							<td class="text-{{ $item.TemperatureMinColor }}">
+							<td style="color: {{ $item.TemperatureMinColor }}">
 								{{ $item.TemperatureMin }}°
 							</td>
-							<td class="text-{{ $item.TemperatureMaxColor }}">
+							<td style="color: {{ $item.TemperatureMaxColor }}">
 								{{ $item.TemperatureMax }}°
 							</td>
 						</tr>
@@ -57,13 +57,13 @@
 							<th>
 								Precipitation
 							</th>
-							<td class="text-{{ $item.PrecipitationColor }}">
+							<td style="color: {{ $item.PrecipitationColor }}">
 								{{ $item.Precipitation }} mm
 							</td>
-							<td class="text-{{ $item.PrecipitationMinColor }}">
+							<td style="color: {{ $item.PrecipitationMinColor }}">
 								{{ $item.PrecipitationMin }} mm
 							</td>
-							<td class="text-{{ $item.PrecipitationMaxColor }}">
+							<td style="color: {{ $item.PrecipitationMaxColor }}">
 								{{ $item.PrecipitationMax }} mm
 							</td>
 						</tr>

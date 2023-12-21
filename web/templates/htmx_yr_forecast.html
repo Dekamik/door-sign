@@ -11,7 +11,7 @@
 		{{range .yr}}
 		<tr style="height: 2em">
 			<th scope="row">{{ .Time }}</th>
-			<td class="text-{{ .TemperatureColor }}">{{ .Temperature }}°</td>
+			<td style="color: {{ .TemperatureColor }}">{{ .Temperature }}°</td>
 			<td>
 				<img class="icon"
 					 src="../images/weather/dist/light-mode/default/svg/{{ .SymbolID }}.svg"
