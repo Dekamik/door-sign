@@ -3,7 +3,7 @@ package main
 import (
 	"door-sign/internal/config"
 	"door-sign/internal/handlers/sl"
-	"door-sign/internal/handlers/temporal"
+	"door-sign/internal/handlers/timeanddate"
 	"door-sign/internal/handlers/yr"
 	"door-sign/web"
 	"html/template"
@@ -31,7 +31,7 @@ func main() {
 			"templates/htmx_yr_forecast.html"))
 		t.Execute(c.Writer, gin.H{
 			"nav":   "index",
-			"time":  temporal.GetTime(),
+			"time":  timeanddate.GetTime(),
 			"yr":    YR.GetForecasts(conf, rowCount),
 			"yrNow": YR.GetCurrent(conf),
 			"sl":    sl.GetDepartures(conf, siteID, rowCount),
@@ -41,7 +41,7 @@ func main() {
 	router.GET("/htmx/time.html", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(web.TemplateFS,
 			"templates/htmx_time.html"))
-		t.Execute(c.Writer, gin.H{"time": temporal.GetTime()})
+		t.Execute(c.Writer, gin.H{"time": timeanddate.GetTime()})
 	})
 
 	router.GET("/htmx/yr_now.html", func(c *gin.Context) {

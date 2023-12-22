@@ -1,4 +1,4 @@
-package temporal
+package timeanddate
 
 import (
 	"fmt"
