@@ -1,7 +1,7 @@
 [App]
 Port = 8080
 
-[Departures]
+[SL]
 BusStop = "<location>"
 SLDeparturesV4Key = "<key>"
 SLServiceAlertsV2Key = "<key>"
@@ -13,9 +13,9 @@ Lat = <int>
 Lon = <int>
 
 [Weather.Colors]
-TempMin = -20
+TempMin = -30
 TempMid = 0
-TempMax = 25
+TempMax = 30
 
 TempColorCoolCoolest = "#0033cc"
 TempColorCoolHottest = "#ccd9ff"

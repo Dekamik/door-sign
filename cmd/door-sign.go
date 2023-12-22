@@ -2,7 +2,9 @@ package main
 
 import (
 	"door-sign/internal/config"
-	"door-sign/internal/handlers"
+	"door-sign/internal/handlers/sl"
+	"door-sign/internal/handlers/time"
+	"door-sign/internal/handlers/yr"
 	"door-sign/web"
 	"html/template"
 
@@ -13,8 +15,8 @@ func main() {
 	const rowCount int = 4
 
 	conf := *config.ReadConfig()
-	siteID := handlers.GetSLSiteID(conf)
-	YR := handlers.NewYR()
+	siteID := sl.GetSLSiteID(conf)
+	YR := yr.NewYR()
 
 	router := gin.Default()
 
@@ -29,17 +31,17 @@ func main() {
 			"templates/htmx_yr_forecast.html"))
 		t.Execute(c.Writer, gin.H{
 			"nav":   "index",
-			"time":  handlers.GetTime(),
+			"time":  time.GetTime(),
 			"yr":    YR.GetForecasts(conf, rowCount),
 			"yrNow": YR.GetCurrent(conf),
-			"sl":    handlers.UpdateSL(conf, siteID, rowCount),
+			"sl":    sl.GetDepartures(conf, siteID, rowCount),
 		})
 	})
 
 	router.GET("/htmx/time.html", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(web.TemplateFS,
 			"templates/htmx_time.html"))
-		t.Execute(c.Writer, gin.H{"time": handlers.GetTime()})
+		t.Execute(c.Writer, gin.H{"time": time.GetTime()})
 	})
 
 	router.GET("/htmx/yr_now.html", func(c *gin.Context) {
@@ -51,7 +53,7 @@ func main() {
 	router.GET("/htmx/sl.html", func(c *gin.Context) {
 		t := template.Must(template.ParseFS(web.TemplateFS,
 			"templates/htmx_sl.html"))
-		t.Execute(c.Writer, gin.H{"sl": handlers.UpdateSL(conf, siteID, rowCount)})
+		t.Execute(c.Writer, gin.H{"sl": sl.GetDepartures(conf, siteID, rowCount)})
 	})
 
 	router.GET("/htmx/yr_forecast.html", func(c *gin.Context) {
@@ -68,17 +70,20 @@ func main() {
 			"templates/htmx_yr_full_forecast.html"))
 		t.Execute(c.Writer, gin.H{
 			"nav": "weather",
-			"yr": YR.GetFullForecasts(conf),
+			"yr":  YR.GetFullForecasts(conf),
 		})
 	})
 
 	router.GET("/disruptions", func(c *gin.Context) {
+		deviations := sl.GetDeviations(conf)
 		t := template.Must(template.ParseFS(web.TemplateFS,
 			"templates/disruptions.html",
 			"templates/imports.html",
-			"templates/htmx_navbar.html"))
+			"templates/htmx_navbar.html",
+			"templates/htmx_sl_deviations.html"))
 		t.Execute(c.Writer, gin.H{
 			"nav": "disruptions",
+			"sl":  deviations,
 		})
 	})
 

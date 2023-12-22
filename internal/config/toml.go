@@ -10,12 +10,17 @@ type Config struct {
 	App struct {
 		Port int
 	}
-	Departures struct {
+	SL struct {
 		BusStop              string
 		SLDeparturesV4Key    string
 		SLServiceAlertsV2Key string
 		SLStopLookupV1Key    string
 		SLStopsAndLinesV2Key string
+		Deviations           *struct {
+			SiteID         *int
+			LineNumbers    []string
+			TransportModes []string
+		}
 	}
 	Weather struct {
 		Lat    float32

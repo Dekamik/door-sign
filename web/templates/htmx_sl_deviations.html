@@ -1,0 +1,22 @@
+<div class="accordion accordion-flush" id="weather">
+	{{range $i, $item := .sl}}
+	<div class="accordion-item">
+		<h2 class="accordion-header">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sl_{{printf "%d" $i}}" aria-expanded="false" aria-controls="weather_{{printf "%d" $i}}">
+				<b>{{ $item.Scope }}:</b> {{ $item.Header }}
+			</button>
+		</h2>
+		<div id="sl_{{printf "%d" $i}}" class="accordion-collapse collapse" data-bs-parent="#weather">
+			<div class="accordion-body">
+				{{ $item.Description }}
+				<br/>
+				<b>Affects:</b> {{ $item.Scope }}
+			</div>
+		</div>
+	</div>
+	{{else}}
+	<p>
+		{{ .sl.ErrorMessage }}
+	</p>
+	{{end}}
+</div>
