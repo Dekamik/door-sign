@@ -1,6 +1,7 @@
-package integrations
+package v1
 
 import (
+	"door-sign/internal/integrations"
 	"fmt"
 	"strings"
 	"time"
@@ -113,12 +114,12 @@ type SLDeviationsResponse struct {
 
 func SLStopLookup(apiKey string, searchString string, maxResults int) (*SLStopLookupResponse, error) {
 	url := fmt.Sprintf("https://api.sl.se/api2/typeahead.json?key=%s&maxresults=%d&searchstring=%s", apiKey, maxResults, searchString)
-	return get[SLStopLookupResponse](url)
+	return integrations.Get[SLStopLookupResponse](url)
 }
 
 func SLGetDepartures(apiKey string, siteId string, timeWindow int) (*SLDeparturesResponse, error) {
 	url := fmt.Sprintf("http://api.sl.se/api2/realtimedeparturesV4.JSON?key=%s&siteid=%s&timewindow=%d", apiKey, siteId, timeWindow)
-	return get[SLDeparturesResponse](url)
+	return integrations.Get[SLDeparturesResponse](url)
 }
 
 type SLGetDeviationsArgs struct {
@@ -173,5 +174,5 @@ func SLGetDeviations(apiKey string, args SLGetDeviationsArgs) (*SLDeviationsResp
 	url := fmt.Sprintf("http://api.sl.se/api2/deviations.JSON?key=%s&transportMode=%s&lineNumber=%s&siteId=%s&fromDate=%s&toDate=%s",
 		apiKey, transportModes, lineNumbers, siteID, fromDate, toDate)
 
-	return get[SLDeviationsResponse](url)
+	return integrations.Get[SLDeviationsResponse](url)
 }

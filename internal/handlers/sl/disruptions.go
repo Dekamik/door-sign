@@ -2,7 +2,7 @@ package sl
 
 import (
 	"door-sign/internal/config"
-	"door-sign/internal/integrations"
+	"door-sign/internal/integrations/v1"
 	"log/slog"
 	"time"
 )
@@ -24,19 +24,19 @@ type Deviation struct {
 }
 
 func GetDeviations(conf config.Config) Deviations {
-	modes := make([]integrations.TransportMode, 0)
+	modes := make([]v1.TransportMode, 0)
 	for _, item := range conf.SL.Deviations.TransportModes {
-		mode := integrations.TransportModeMap[item]
+		mode := v1.TransportModeMap[item]
 		modes = append(modes, mode)
 	}
 
-	args := integrations.SLGetDeviationsArgs{
+	args := v1.SLGetDeviationsArgs{
 		SiteID:        conf.SL.Deviations.SiteID,
 		LineNumber:    conf.SL.Deviations.LineNumbers,
 		TransportMode: modes,
 	}
 
-	res, err := integrations.SLGetDeviations(conf.SL.SLServiceAlertsV2Key, args)
+	res, err := v1.SLGetDeviations(conf.SL.SLServiceAlertsV2Key, args)
 	if err != nil {
 		slog.Error("an error occurred when calling SL API", "err", err)
 		return Deviations{

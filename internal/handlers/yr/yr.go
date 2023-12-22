@@ -4,7 +4,7 @@ import (
 	"door-sign/internal/config"
 	"door-sign/internal/handlers/temporal"
 	"door-sign/internal/helpers"
-	"door-sign/internal/integrations"
+	"door-sign/internal/integrations/v1"
 	"log"
 	"log/slog"
 	"math"
@@ -19,7 +19,7 @@ type YR interface {
 
 type YRImpl struct {
 	CacheLifetime          time.Duration
-	CachedForecastResponse *Cache[*integrations.YRResponse]
+	CachedForecastResponse *Cache[*v1.YRResponse]
 }
 
 var _ YR = &YRImpl{}
@@ -75,18 +75,18 @@ type Cache[T any] struct {
 	Data      T
 }
 
-func (y *YRImpl) getForecasts(conf config.Config) *integrations.YRResponse {
+func (y *YRImpl) getForecasts(conf config.Config) *v1.YRResponse {
 	if y.CachedForecastResponse != nil && time.Now().Before(y.CachedForecastResponse.ExpiresAt) {
 		log.Println("YR: Getting cached response")
 		return y.CachedForecastResponse.Data
 	}
 
 	log.Println("YR: Getting new repsonse from met.no")
-	res, err := integrations.YRGetLocationForecast(conf.Weather.Lat, conf.Weather.Lon)
+	res, err := v1.YRGetLocationForecast(conf.Weather.Lat, conf.Weather.Lon)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	y.CachedForecastResponse = &Cache[*integrations.YRResponse]{
+	y.CachedForecastResponse = &Cache[*v1.YRResponse]{
 		ExpiresAt: time.Now().Add(y.CacheLifetime),
 		Data:      res,
 	}

@@ -1,6 +1,7 @@
-package integrations
+package v1
 
 import (
+	"door-sign/internal/integrations"
 	"fmt"
 	"time"
 )
@@ -106,5 +107,5 @@ type YRResponse struct {
 
 func YRGetLocationForecast(lat float32, lon float32) (*YRResponse, error) {
 	url := fmt.Sprintf("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%f&lon=%f", lat, lon)
-	return get[YRResponse](url)
+	return integrations.Get[YRResponse](url)
 }

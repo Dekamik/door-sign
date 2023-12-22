@@ -3,7 +3,7 @@ package sl
 import (
 	"door-sign/internal/config"
 	"door-sign/internal/helpers"
-	"door-sign/internal/integrations"
+	"door-sign/internal/integrations/v1"
 	"fmt"
 	"log"
 	"log/slog"
@@ -47,7 +47,7 @@ func formatDisplayTime(displayTime string, expectedAt string) string {
 	return result
 }
 
-func extractDepartures(items []integrations.SLDeparturesResponseItem) []Departure {
+func extractDepartures(items []v1.SLDeparturesResponseItem) []Departure {
 	departures := make([]Departure, 0)
 
 	for _, item := range items {
@@ -64,7 +64,7 @@ func extractDepartures(items []integrations.SLDeparturesResponseItem) []Departur
 }
 
 func GetDepartures(conf config.Config, siteId string, maxLength int) Departures {
-	res, err := integrations.SLGetDepartures(conf.SL.SLDeparturesV4Key, siteId, 60)
+	res, err := v1.SLGetDepartures(conf.SL.SLDeparturesV4Key, siteId, 60)
 	if err != nil {
 		slog.Error("an error occurred when calling SL API", "err", err)
 		return Departures{
@@ -96,7 +96,7 @@ func GetDepartures(conf config.Config, siteId string, maxLength int) Departures 
 
 func GetSLSiteID(conf config.Config) string {
 	escapedBusStop := url.QueryEscape(conf.SL.BusStop)
-	res, err := integrations.SLStopLookup(conf.SL.SLStopLookupV1Key, escapedBusStop, 1)
+	res, err := v1.SLStopLookup(conf.SL.SLStopLookupV1Key, escapedBusStop, 1)
 	if err != nil {
 		log.Fatalln(err)
 	}
