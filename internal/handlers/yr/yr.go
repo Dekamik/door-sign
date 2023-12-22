@@ -5,9 +5,9 @@ import (
 	"door-sign/internal/handlers/timeanddate"
 	"door-sign/internal/helpers"
 	"door-sign/internal/integrations/v1"
-	"log"
 	"log/slog"
 	"math"
+	"os"
 	"time"
 )
 
@@ -77,14 +77,15 @@ type Cache[T any] struct {
 
 func (y *YRImpl) getForecasts(conf config.Config) *v1.YRResponse {
 	if y.CachedForecastResponse != nil && time.Now().Before(y.CachedForecastResponse.ExpiresAt) {
-		log.Println("YR: Getting cached response")
+		slog.Info("YR: Getting cached response")
 		return y.CachedForecastResponse.Data
 	}
 
-	log.Println("YR: Getting new repsonse from met.no")
+	slog.Info("YR: Getting new repsonse from met.no")
 	res, err := v1.YRGetLocationForecast(conf.Weather.Lat, conf.Weather.Lon)
 	if err != nil {
-		log.Fatalln(err)
+		// HACK: needs proper error handling
+		slog.Error("error occurred when calling YR.no", "err", err)
 	}
 	y.CachedForecastResponse = &Cache[*v1.YRResponse]{
 		ExpiresAt: time.Now().Add(y.CacheLifetime),

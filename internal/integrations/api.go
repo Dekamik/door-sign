@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 )
 
@@ -36,7 +36,10 @@ func call[T any](req *http.Request) (*T, error) {
 	if res.StatusCode >= 400 {
 		return nil, fmt.Errorf("%s - %s %s returned the following error:\n%s\n", res.Status, req.Method, req.URL.String(), string(bodyBytes))
 	}
-	log.Printf("%s - %s %s\n", res.Status, req.Method, req.URL.String())
+	slog.Info("HTTP request",
+		"status", res.Status,
+		"method", req.Method,
+		"url", req.URL.String())
 
 	var response T
 	err = json.Unmarshal(bodyBytes, &response)

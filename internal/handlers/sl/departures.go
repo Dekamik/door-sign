@@ -5,7 +5,6 @@ import (
 	"door-sign/internal/helpers"
 	"door-sign/internal/integrations/v1"
 	"fmt"
-	"log"
 	"log/slog"
 	"net/url"
 	"regexp"
@@ -98,7 +97,8 @@ func GetSLSiteID(conf config.Config) string {
 	escapedBusStop := url.QueryEscape(conf.SL.BusStop)
 	res, err := v1.SLStopLookup(conf.SL.SLStopLookupV1Key, escapedBusStop, 1)
 	if err != nil {
-		log.Fatalln(err)
+		// HACK: needs proper error handling
+		slog.Error("error occurred when calling SL API", "err", err)
 	}
 	return res.ResponseData[0].SiteId
 }

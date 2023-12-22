@@ -2,7 +2,6 @@ package config
 
 import (
 	"github.com/BurntSushi/toml"
-	"log"
 	"os"
 )
 
@@ -45,13 +44,13 @@ type Config struct {
 func ReadConfig() *Config {
 	tomlData, err := os.ReadFile("config.toml")
 	if err != nil {
-		log.Panicln(err)
+		panic(err)
 	}
 	str := string(tomlData)
 	var conf Config
 	_, err = toml.Decode(str, &conf)
 	if err != nil {
-		log.Panicln(err)
+		panic(err)
 	}
 	return &conf
 }
