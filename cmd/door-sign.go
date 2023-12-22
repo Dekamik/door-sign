@@ -16,7 +16,7 @@ func main() {
 
 	conf := *config.ReadConfig()
 	siteID := sl.GetSLSiteID(conf)
-	YR := yr.NewYR()
+	YR := yr.New()
 
 	router := gin.Default()
 

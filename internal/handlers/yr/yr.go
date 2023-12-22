@@ -224,7 +224,7 @@ func (y *YRImpl) GetFullForecasts(conf config.Config) []YRFullForecast {
 	return forecasts
 }
 
-func NewYR() YR {
+func New() YR {
 	return &YRImpl{
 		CacheLifetime:          time.Minute * 5,
 		CachedForecastResponse: nil,
