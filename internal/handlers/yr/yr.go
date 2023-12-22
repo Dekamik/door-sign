@@ -2,6 +2,7 @@ package yr
 
 import (
 	"door-sign/internal/config"
+	"door-sign/internal/handlers/temporal"
 	"door-sign/internal/helpers"
 	"door-sign/internal/integrations"
 	"log"
@@ -182,7 +183,7 @@ func (y *YRImpl) GetFullForecasts(conf config.Config) []YRFullForecast {
 	forecasts := []YRFullForecast{}
 	for _, item := range res.Properties.Timeseries {
 		forecast := YRFullForecast{
-			Time:                     item.Time.Local().Format("15:04 - 2/1"),
+			Time:                     temporal.GetDateStr(item.Time.Local()),
 			AirPressureAtSeaLevel:    item.Data.Instant.Details.AirPressureAtSeaLevel,
 			Temperature:              item.Data.Instant.Details.AirTemperature,
 			TemperatureColor:         y.getTemperatureColor(conf, item.Data.Instant.Details.AirTemperature),
