@@ -75,7 +75,6 @@ func main() {
 	})
 
 	router.GET("/disruptions", func(c *gin.Context) {
-		deviations := sl.GetDeviations(conf)
 		t := template.Must(template.ParseFS(web.TemplateFS,
 			"templates/disruptions.html",
 			"templates/imports.html",
@@ -83,7 +82,7 @@ func main() {
 			"templates/htmx_sl_deviations.html"))
 		t.Execute(c.Writer, gin.H{
 			"nav": "disruptions",
-			"sl":  deviations,
+			"sl":  sl.GetDeviations(conf),
 		})
 	})
 

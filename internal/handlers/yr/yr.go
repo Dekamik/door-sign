@@ -7,7 +7,6 @@ import (
 	"door-sign/internal/integrations/v1"
 	"log/slog"
 	"math"
-	"os"
 	"time"
 )
 
