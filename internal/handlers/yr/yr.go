@@ -35,6 +35,7 @@ type YRForecast struct {
 
 type YRFullForecast struct {
 	Time                     string
+	Date                     string
 	AirPressureAtSeaLevel    float64
 	Temperature              float64
 	TemperatureColor         string
@@ -183,7 +184,8 @@ func (y *YRImpl) GetFullForecasts(conf config.Config) []YRFullForecast {
 	forecasts := []YRFullForecast{}
 	for _, item := range res.Properties.Timeseries {
 		forecast := YRFullForecast{
-			Time:                     item.Time.Local().Format("15:04") + " - " + timeanddate.GetDateStr(item.Time.Local()),
+			Time:                     item.Time.Local().Format("15:04"),
+			Date:                     timeanddate.GetDateStr(item.Time.Local()),
 			AirPressureAtSeaLevel:    item.Data.Instant.Details.AirPressureAtSeaLevel,
 			Temperature:              item.Data.Instant.Details.AirTemperature,
 			TemperatureColor:         y.getTemperatureColor(conf, item.Data.Instant.Details.AirTemperature),

@@ -4,7 +4,7 @@
 		<h2 class="accordion-header">
 			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#weather_{{printf "%d" $i}}" aria-expanded="false" aria-controls="weather_{{printf "%d" $i}}">
 				<span class="w-25">
-					{{ $item.Time }}&nbsp;
+					<b>{{ $item.Time }}</b> - {{ $item.Date }}&nbsp;
 				</span>
 				<span class="w-25" style="color: {{ $item.TemperatureColor }}">
 					{{ $item.Temperature }}°&nbsp;
